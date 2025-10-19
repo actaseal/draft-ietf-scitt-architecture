@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-16T00:52:45.944739+00:00",
+  "timestamp": "2025-10-19T00:58:50.320143+00:00",
   "repo": "ietf-wg-scitt/draft-ietf-scitt-architecture",
   "labels": [
     {
@@ -60377,24 +60377,26 @@
       "id": "PR_kwDOIvmHss6t8oBg",
       "title": "Syntax-Check EDN examples",
       "url": "https://github.com/ietf-wg-scitt/draft-ietf-scitt-architecture/pull/458",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "cabo",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-10-15T18:52:44Z",
-      "updatedAt": "2025-10-15T18:53:06Z",
+      "updatedAt": "2025-10-17T15:38:06Z",
       "baseRepository": "ietf-wg-scitt/draft-ietf-scitt-architecture",
       "baseRefName": "main",
       "baseRefOid": "ccff1d42bf55bf35cfc32dfaf6b8a8576496beee",
       "headRepository": "cabo/draft-ietf-scitt-architecture",
       "headRefName": "syntax-check-edn",
       "headRefOid": "63cdc9e8789078d166d7e11ba2cc83411c5a3f0b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-10-17T15:38:05Z",
+      "mergedAt": "2025-10-17T15:38:05Z",
+      "mergedBy": "achamayou",
+      "mergeCommit": {
+        "oid": "ba7d23d40557f0206735592036532414139d9a57"
+      },
       "comments": [
         {
           "author": "cabo",
@@ -60402,9 +60404,92 @@
           "body": "I haven't done validation yet",
           "createdAt": "2025-10-15T18:53:06Z",
           "updatedAt": "2025-10-15T18:53:06Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The one problem I still had with this is a tool problem, https://github.com/cabo/kramdown-rfc/issues/267; this should not slow down the work progressing.\r\nI can't approve my own PR, but after the discussion now would like to...\r\n\r\n",
+          "createdAt": "2025-10-17T15:32:54Z",
+          "updatedAt": "2025-10-17T15:32:54Z"
+        },
+        {
+          "author": "achamayou",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@cabo thank you for checking and for the PR!",
+          "createdAt": "2025-10-17T15:37:50Z",
+          "updatedAt": "2025-10-17T15:37:50Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOIvmHss7HmVv8",
+          "commit": {
+            "abbreviatedOid": "63cdc9e"
+          },
+          "author": "henkbirkholz",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-17T07:47:11Z",
+          "updatedAt": "2025-10-17T07:47:11Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOIvmHss7HnYK6",
+          "commit": {
+            "abbreviatedOid": "63cdc9e"
+          },
+          "author": "achamayou",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-17T08:58:21Z",
+          "updatedAt": "2025-10-17T08:58:21Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 459,
+      "id": "PR_kwDOIvmHss6uP7ZI",
+      "title": "Henk's email address",
+      "url": "https://github.com/ietf-wg-scitt/draft-ietf-scitt-architecture/pull/459",
+      "state": "MERGED",
+      "author": "henkbirkholz",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "nomen omen est",
+      "createdAt": "2025-10-17T07:56:23Z",
+      "updatedAt": "2025-10-17T11:49:10Z",
+      "baseRepository": "ietf-wg-scitt/draft-ietf-scitt-architecture",
+      "baseRefName": "main",
+      "baseRefOid": "ccff1d42bf55bf35cfc32dfaf6b8a8576496beee",
+      "headRepository": "ietf-wg-scitt/draft-ietf-scitt-architecture",
+      "headRefName": "henk-email",
+      "headRefOid": "4d4fe94f54a5c9292080ac586575ebea08ce0bbd",
+      "closedAt": "2025-10-17T11:49:10Z",
+      "mergedAt": "2025-10-17T11:49:10Z",
+      "mergedBy": "OR13",
+      "mergeCommit": {
+        "oid": "4b5e839304e8651e4c2b2a56deb194bbf4a02536"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOIvmHss7HqgMB",
+          "commit": {
+            "abbreviatedOid": "4d4fe94"
+          },
+          "author": "OR13",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-10-17T11:48:58Z",
+          "updatedAt": "2025-10-17T11:48:59Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
