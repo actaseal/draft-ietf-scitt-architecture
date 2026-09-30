@@ -935,6 +935,65 @@ Relying Parties MAY be configured to re-verify the Issuer's Signed Statement loc
 In addition, Relying Parties MAY apply arbitrary validation policies after the Transparent Statement has been verified and validated.
 Such policies may use as input all information in the Envelope, the Receipt, and the Statement payload, as well as any local state.
 
+## Receipt Profile Requirements for Verification Results {#receipt-profile-verification}
+
+A profile MUST define a third verification result, distinct from valid and invalid, and MUST require that result be returned before any comparison the profile cannot perform is attempted, so that the third result is reachable from a position where neither of the other two has been computed.
+
+A profile MUST pin one behaviour per condition.
+It MUST NOT define a fallback of the form "this path or, failing that, some other path", because a fallback returns one of the other two results for the very condition the third was defined to cover.
+
+For each comparison a profile makes normative, the profile MUST require that at least one side is derivable by the relying party independently of the party being checked.
+Where a comparison has no such side, the profile MUST name it, and its result MUST be the third value, declared rather than computed.
+As one case of this requirement: where a payload references a conclusion whose content is external to the payload, the profile MUST require a cryptographic hash of that content to be bound within the signed payload, so that the referenced content is derivable and checkable by the relying party independently of the party being checked.
+
+Where a profile's handling of an unresolved verification key depends on whether the trust material supplied by the relying party is complete, the profile MUST define an explicit relying-party completeness input and its default.
+Omission of that input MUST NOT be read as a declaration of completeness.
+The profile MUST distinguish inability to complete a check for lack of trust material from refusal under a declared-complete trust policy, and MUST identify the latter as a relying-party disposition rather than a failure of a cryptographic check that did not run.
+Refusal and failed verification MUST NOT share a verification result value.
+In any result a profile emits for use beyond the verifier, the disposition MUST NOT be separable from the verification result by a consumer that receives the verification result.
+Where the profile signs an emitted result, the disposition MUST be within what is signed.
+A verification result value alone MUST NOT be relied on to carry the distinction.
+
+Where a profile makes a digest over a collection normative, the profile MUST state that such a digest is not evidence of membership unless the number of elements is bound within what is signed or hashed, and that the collection or tree shape is declared by the producer.
+An authenticated element count distinguishes collections of differing size under a declared construction, but count binding alone MUST NOT be treated as proof of membership or of append-only history.
+Those remain separate proof obligations.
+
+# Implementation Status
+
+This section records implementation experience for {{receipt-profile-verification}}, per {{?BCP205=RFC7942}}.
+It is to be removed by the RFC Editor before publication.
+
+## TKCollective verifier
+
+Organization: TKCollective.
+Name: verifier 0.1.1, reference tests pinned at commit 97e09e7.
+Description: returns a policy-refusal result for an unresolved key and carries the distinction in a reason accompanying the result.
+Maturity: prototype.
+Coverage: the third verification result.
+The 0.1.1 mapping places refusal alongside an invalid result rather than as a separate disposition; the implementer has identified this as the weaker form and has stated that a profile should not inherit it.
+Version compatibility: tracks this section as discussed in issue #462.
+Licensing: per the implementation's own repository.
+Implementation experience: the four pinned reference tests are held at a fixed commit so that a paired implementation has a stable target.
+Contact: via issue #462.
+Last updated: 2026-09-30.
+
+## ActaSeal
+
+Organization: ActaSeal.
+Name: actaseal-verify, conformance vectors pinned at tag v0.1.0 (a6dbca0).
+Description: standalone offline verifier for signed decision receipts.
+Emits a structured result carrying a verification result, a relying-party disposition and a trust-material completeness input as one atomic object.
+Maturity: prototype.
+Coverage: the third verification result, emitted as a distinct value rather than as a reason on an invalid result; the completeness input and its default; and the requirement that the disposition not be separable from the verification result.
+Not implemented: the fallback prohibition and the independent-derivability requirement have not been separately exercised.
+The emitted result is not cryptographically signed, and the implementer's position is that signing it would not be meaningful for a standalone offline checker, which is why the non-separability requirement is worded as it is rather than as a signature requirement.
+Version compatibility: tracks this section as discussed in issue #462.
+Licensing: Apache License 2.0.
+Implementation experience: attempting to sign the emitted result is what surfaced that a requirement for the distinction to be "covered by the same integrity protection as the verification result" is vacuous where the verification result itself carries no cryptographic protection.
+Separately, nine tests in the implementation were found to be exercising a different storage backend from the one used at runtime, which is why coverage above is stated per requirement rather than as a pass rate.
+Contact: via issue #462.
+Last updated: 2026-09-30.
+
 # Privacy Considerations
 
 Interactions with Transparency Services are expected to use appropriately strong encryption and authorization technologies.
