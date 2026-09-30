@@ -944,19 +944,24 @@ It MUST NOT define a fallback of the form "this path or, failing that, some othe
 
 For each comparison a profile makes normative, the profile MUST require that at least one side is derivable by the relying party independently of the party being checked.
 Where a comparison has no such side, the profile MUST name it, and its result MUST be the third value, declared rather than computed.
-As one case of this requirement: where a payload references a conclusion whose content is external to the payload, the profile MUST require a cryptographic hash of that content to be bound within the signed payload, so that the referenced content is derivable and checkable by the relying party independently of the party being checked.
+As one case of this requirement: where a payload references a conclusion whose content is external to the payload, the profile MUST require a cryptographic hash of that content to be bound within the signed payload, so that a relying party that obtains the referenced content can independently recompute its digest and compare it with the hash bound in the signed payload.
 
 Where a profile's handling of an unresolved verification key depends on whether the trust material supplied by the relying party is complete, the profile MUST define an explicit relying-party completeness input and its default.
 Omission of that input MUST NOT be read as a declaration of completeness.
 The profile MUST distinguish inability to complete a check for lack of trust material from refusal under a declared-complete trust policy, and MUST identify the latter as a relying-party disposition rather than a failure of a cryptographic check that did not run.
 Refusal and failed verification MUST NOT share a verification result value.
-In any result a profile emits for use beyond the verifier, the disposition MUST NOT be separable from the verification result by a consumer that receives the verification result.
+Where lack of trust material prevents completing the check, the profile returns the third verification result required by MUST 1.
+Refusal under a declared-complete trust policy remains a relying-party disposition, not a failed cryptographic check.
+This does not introduce a fourth verification result value.
+A profile MUST emit the verification result and any associated policy disposition together in one structured result.
+Consumers forwarding or aggregating that result MUST preserve the distinction and MUST NOT reclassify policy refusal as failed cryptographic verification.
+Any integrity protection applied to the emitted result MUST cover both.
+Where a disposition is required by the profile, its absence makes the result incomplete; it MUST NOT be interpreted as evidence that a cryptographic check failed.
 Where the profile signs an emitted result, the disposition MUST be within what is signed.
 A verification result value alone MUST NOT be relied on to carry the distinction.
 
-Where a profile makes a digest over a collection normative, the profile MUST state that such a digest is not evidence of membership unless the number of elements is bound within what is signed or hashed, and that the collection or tree shape is declared by the producer.
-An authenticated element count distinguishes collections of differing size under a declared construction, but count binding alone MUST NOT be treated as proof of membership or of append-only history.
-Those remain separate proof obligations.
+Under a declared duplicate-last construction, where differently sized lists must be disambiguated, the profile MUST bind the number of elements within what is signed or hashed.
+Membership and append-only history remain separate proof obligations that authenticated count binding alone does not satisfy.
 
 # Implementation Status
 
@@ -966,27 +971,30 @@ It is to be removed by the RFC Editor before publication.
 ## TKCollective verifier
 
 Organization: TKCollective.
-Name: verifier 0.1.1, reference tests pinned at commit 97e09e7.
+Name: tanilo-receipt-verify 0.1.1, pinned at commit 97e09e7.
 Description: returns a policy-refusal result for an unresolved key and carries the distinction in a reason accompanying the result.
 Maturity: prototype.
 Coverage: the third verification result.
-The 0.1.1 mapping places refusal alongside an invalid result rather than as a separate disposition; the implementer has identified this as the weaker form and has stated that a profile should not inherit it.
+The invalid-plus-reason mapping is reference behaviour, not an implementation of the separate disposition rule required above.
+Version 0.1.2 changed only one diagnostic reason string; this mapping is unchanged in 0.1.2.
 Version compatibility: tracks this section as discussed in issue #462.
 Licensing: per the implementation's own repository.
 Implementation experience: the four pinned reference tests are held at a fixed commit so that a paired implementation has a stable target.
 Contact: via issue #462.
 Last updated: 2026-09-30.
 
-## ActaSeal
+## ActaSeal (Xavier Goshi)
 
 Organization: ActaSeal.
 Name: actaseal-verify, conformance vectors pinned at tag v0.1.0 (a6dbca0).
 Description: standalone offline verifier for signed decision receipts.
 Emits a structured result carrying a verification result, a relying-party disposition and a trust-material completeness input as one atomic object.
 Maturity: prototype.
-Coverage: the third verification result, emitted as a distinct value rather than as a reason on an invalid result; the completeness input and its default; and the requirement that the disposition not be separable from the verification result.
-Not implemented: the fallback prohibition and the independent-derivability requirement have not been separately exercised.
-The emitted result is not cryptographically signed, and the implementer's position is that signing it would not be meaningful for a standalone offline checker, which is why the non-separability requirement is worded as it is rather than as a signature requirement.
+Coverage: the verdict, disposition, and trust-material completeness input, emitted together in one structured result.
+The verdict takes one of three values: CRYPTOGRAPHICALLY_VALID, CRYPTOGRAPHICALLY_INVALID, or NOT_EVALUATED.
+A policy refusal never appears as a verdict value.
+Completeness defaults to incomplete, and its absence never resolves to complete.
+Not implemented: the consumption-side obligation, which does not apply to an emitter, and the requirement that any integrity protection applied to the emitted result cover both, because no integrity protection is applied to the emitted result.
 Version compatibility: tracks this section as discussed in issue #462.
 Licensing: Apache License 2.0.
 Implementation experience: attempting to sign the emitted result is what surfaced that a requirement for the distinction to be "covered by the same integrity protection as the verification result" is vacuous where the verification result itself carries no cryptographic protection.
